@@ -23,16 +23,23 @@ app.post('/dialogflow', express.json(), (req, res) => {
   }
 
   function movie(agent){
+    var i = 1
     var genreInput = agent.parameters.genre
     var genreLower = genreInput.toLowerCase()
     var moviegenreid = genreid(genreLower)
     console.log(moviegenreid)
-    // tmdb.genre.movies(moviegenreid,(err,res)=>{
-    //   console.log(res)
+    for (i; i<=10; i++){
+      tmdb.genre.movies(moviegenreid,i,(err,res) => {
+        let movieres = res.results
+        //console.log(movieres)
+        movieres.forEach(element => {
+          console.log(element.title)
+        });
+      })
+    }
+    // tmdb.movie.info(28,(err,res)=>{
+    //   console.log(res.title)
     // })
-    tmdb.movie.info(28,(err,res)=>{
-      console.log(res.title)
-    })
   }
 
   let intentMap = new Map()
