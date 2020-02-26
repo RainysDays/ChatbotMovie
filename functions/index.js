@@ -25,6 +25,10 @@ app.post('/dialogflow', express.json(), (req, res) => {
   function RecommendAskGenreHandler(agent){
     agent.add('Genre film apa yang ingin direkomendasikan?')
   }
+
+  function RecommendChoiceFallbackHandler(agent){
+    agent.add('Maaf, saat ini pilihan rekomendasi hanya berdasarkan genre dan rating film. Jadi mau direkomendasikan berdasarkan genre atau rating film?')
+  }
   
   function RecommendGetGenreHandler(agent){
     var genreInput = agent.parameters.genre
@@ -48,7 +52,7 @@ app.post('/dialogflow', express.json(), (req, res) => {
     })
   }
 
-  function fallback(agent){
+  function fallbackdefaulthandler(agent){
     agent.add("Maaf, bisa diulang?")
   }
 
@@ -57,7 +61,8 @@ app.post('/dialogflow', express.json(), (req, res) => {
   intentMap.set('RecommendChoiceAskGenre', RecommendAskGenreHandler)
   intentMap.set('RecommendChoiceGetGenre', RecommendGetGenreHandler)
   intentMap.set('RecommendChoiceTopRated', RecommendTopRatedHandler)
-  intentMap.set('Fallback Intent', fallback)
+  intentMap.set('RecommendChoiceFallback', RecommendChoiceFallbackHandler)
+  intentMap.set('Fallback Intent', fallbackdefaulthandler)
   agent.handleRequest(intentMap)
 })
 
