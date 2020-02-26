@@ -1,3 +1,3 @@
 # ChatbotMovie
-a movie conversational recommender system
-try this chatbot using this link : tg://resolve?domain=KenMovieBot
+a movie conversational recommender system<br/>
+try this chatbot using this link :[MovieChatbot](t.me/KenMovieBot)
