@@ -1,3 +1,3 @@
 # ChatbotMovie
 a movie conversational recommender system<br/>
-try this chatbot using this link : [MovieChatbot](tg://resolve?domain=KenMovieBot)
+try this chatbot using in telegram with username : @KenMovieBot
