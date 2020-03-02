@@ -32,14 +32,42 @@ app.post('/dialogflow', express.json(), (req, res) => {
   
   function RecommendGetGenreHandler(agent){
     var genreInput = agent.parameters.genre
+    var tahun = agent.parameters.tahun
+    agent.add('Oke, pilihan genre kamu '+genreInput+' dan film tahun '+tahun+'. Ada genre yang mau ditambahkan lagi?')
+  }
+
+  function RecommendChoiceGetGenreYesHandler(agent){
+
+    //input1 from context
+    var genreInput1 = agent.getContext('recommendchoicegetgenre-followup').parameters.genre
+    var genreLower1 = genreInput1.toLowerCase()
+    var moviegenreid1 = genreid(genreLower1)
+
+    //input2 from action and parameters intent
+    var genreInput2 = agent.parameters.genre2
+    var genreLower2 = genreInput2.toLowerCase()
+    var moviegenreid2 = genreid(genreLower2)
+    var tahun = agent.getContext('recommendchoicegetgenre-followup').parameters.tahun
+    agent.add('Ini list film dengan genre '+genreInput1+' dan '+genreInput2+' rilisan tahun '+tahun+' :')
+    return themoviedb.discover.movie({with_genres:moviegenreid1,moviegenreid2,primary_release_year:tahun}).then((data)=>{
+      let movieres = data.results
+      movieres.forEach(element=>{
+        agent.add(element.title)
+      })
+    })
+  }
+
+  function RecommendChoiceGetGenreNoHandler(agent){
+    var genreInput = agent.getContext('recommendchoicegetgenre-followup').parameters.genre
     var genreLower = genreInput.toLowerCase()
     var moviegenreid = genreid(genreLower)
-    console.log(moviegenreid)
-    return themoviedb.discover.movie({with_genres:moviegenreid}).then((data)=>{
+    var tahun = agent.getContext('recommendchoicegetgenre-followup').parameters.tahun
+    agent.add('Ini list film dengan genre '+genreInput+' rilisan tahun '+tahun+' :')
+    return themoviedb.discover.movie({with_genres:moviegenreid,primary_release_year:tahun}).then((data)=>{
       let movieres = data.results
-      movieres.forEach(element => {
+      movieres.forEach(element=>{
         agent.add(element.title)
-      });
+      })
     })
   }
 
@@ -52,6 +80,8 @@ app.post('/dialogflow', express.json(), (req, res) => {
     })
   }
 
+
+
   function fallbackdefaulthandler(agent){
     agent.add("Maaf, bisa diulang?")
   }
@@ -62,6 +92,8 @@ app.post('/dialogflow', express.json(), (req, res) => {
   intentMap.set('RecommendChoiceGetGenre', RecommendGetGenreHandler)
   intentMap.set('RecommendChoiceTopRated', RecommendTopRatedHandler)
   intentMap.set('RecommendChoiceFallback', RecommendChoiceFallbackHandler)
+  intentMap.set('RecommendChoiceGetGenreYes', RecommendChoiceGetGenreYesHandler)
+  intentMap.set('RecommendChoiceGetGenreNo', RecommendChoiceGetGenreNoHandler)
   intentMap.set('Fallback Intent', fallbackdefaulthandler)
   agent.handleRequest(intentMap)
 })

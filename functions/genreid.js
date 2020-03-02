@@ -9,7 +9,7 @@ function moviegenreid (genre){
     else if(genre == 'adventure'){
       id = 12
     }
-    else if(genre == 'animation'){
+    else if(genre == 'animation' || genre == 'animasi'){
       id = 16
     }
     else if(genre == 'comedy'){
@@ -18,7 +18,7 @@ function moviegenreid (genre){
     else if(genre == 'crime'){
       id = 80
     }
-    else if(genre == 'documentary'){
+    else if(genre == 'documentary' || genre == 'documenter' || genre == 'dokumenter'){
       id = 99
     }
     else if(genre == 'drama'){
