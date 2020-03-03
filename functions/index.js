@@ -33,7 +33,8 @@ app.post('/dialogflow', express.json(), (req, res) => {
   function RecommendGetGenreHandler(agent){
     var genreInput = agent.parameters.genre
     var tahun = agent.parameters.tahun
-    agent.add('Oke, pilihan genre kamu '+genreInput+' dan film tahun '+tahun+'. Ada genre yang mau ditambahkan lagi?')
+    var rate = agent.parameters.rate
+    agent.add('Oke, pilihan genre kamu '+genreInput+' tahun '+tahun+' dan rating '+rate+'. Ada genre yang mau ditambahkan lagi?')
   }
 
   function RecommendChoiceGetGenreYesHandler(agent){
@@ -48,8 +49,9 @@ app.post('/dialogflow', express.json(), (req, res) => {
     var genreLower2 = genreInput2.toLowerCase()
     var moviegenreid2 = genreid(genreLower2)
     var tahun = agent.getContext('recommendchoicegetgenre-followup').parameters.tahun
-    agent.add('Ini list film dengan genre '+genreInput1+' dan '+genreInput2+' rilisan tahun '+tahun+' :')
-    return themoviedb.discover.movie({with_genres:moviegenreid1,moviegenreid2,primary_release_year:tahun}).then((data)=>{
+    var rate = agent.getContext('recommendchoicegetgenre-followup').parameters.rate
+    agent.add('Ini list film dengan genre '+genreInput1+' dan '+genreInput2+' rilisan tahun '+tahun+' dengan rating '+rate+' :')
+    return themoviedb.discover.movie({with_genres:moviegenreid1,moviegenreid2,primary_release_year:tahun,vote_average:rate}).then((data)=>{
       let movieres = data.results
       movieres.forEach(element=>{
         agent.add(element.title)
@@ -62,8 +64,9 @@ app.post('/dialogflow', express.json(), (req, res) => {
     var genreLower = genreInput.toLowerCase()
     var moviegenreid = genreid(genreLower)
     var tahun = agent.getContext('recommendchoicegetgenre-followup').parameters.tahun
-    agent.add('Ini list film dengan genre '+genreInput+' rilisan tahun '+tahun+' :')
-    return themoviedb.discover.movie({with_genres:moviegenreid,primary_release_year:tahun}).then((data)=>{
+    var rate = agent.getContext('recommendchoicegetgenre-followup').parameters.rate
+    agent.add('Ini list film dengan genre '+genreInput+' rilisan tahun '+tahun+' dan rating '+rate+' :')
+    return themoviedb.discover.movie({with_genres:moviegenreid,primary_release_year:tahun,vote_average:rate}).then((data)=>{
       let movieres = data.results
       movieres.forEach(element=>{
         agent.add(element.title)
