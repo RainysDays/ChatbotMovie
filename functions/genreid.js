@@ -45,7 +45,7 @@ function moviegenreid (genre){
     else if(genre == 'romance'){
       id = 10749
     }
-    else if(genre == 'science fiction' || genre == 'sci-fi' || genre == 'scifi'){
+    else if(genre == 'science fiction' || genre == 'sci-fi' || genre == 'scifi' || genre == 'sci fi'){
       id = 878
     }
     else if(genre == 'tv movie'){
