@@ -17,14 +17,13 @@ const genreid = require('./genreid')
 const searchgenre = require('./searchgenre')
 const searchmovid = require('./searchmovieid')
 var movid = null
-var movid2 = 1726
 
 app.get('/', (req, res) => res.send('online'))
 app.post('/dialogflow', express.json(), (req, res) => {
   const agent = new WebhookClient({ request: req, response: res })
 
   function RecommendChoiceHandler(agent){
-    agent.add("Halo mau direkomendasikan film berdasarkan genre atau judul film yang pernah kamu tonton?")
+    agent.add("Halo mau direkomendasikan film berdasarkan genre atau film yang pernah kamu tonton?")
   }
 
   function RecommendAskGenreHandler(agent){
@@ -55,7 +54,7 @@ app.post('/dialogflow', express.json(), (req, res) => {
     var moviegenreid2 = genreid(genreLower2)
     var tahun = agent.getContext('recommendchoicegetgenre-followup').parameters.tahun
     var rate = agent.getContext('recommendchoicegetgenre-followup').parameters.rate
-    agent.add('Ini list film dengan genre '+genreInput1+' dan '+genreInput2+' rilisan tahun '+tahun+' dengan rating '+rate+' :')
+    agent.add('Berikut list film dengan genre '+genreInput1+' dan '+genreInput2+' rilisan tahun '+tahun+' dengan rating '+rate+' :')
     return themoviedb.discover.movie({'with_genres':moviegenreid1,moviegenreid2,'primary_release_year':tahun,'vote_average.gte':rate,'sort_by':'popularity.desc'}).then((data)=>{
       let movieres = data.results
       movieres.forEach(element=>{
@@ -71,7 +70,7 @@ app.post('/dialogflow', express.json(), (req, res) => {
     var moviegenreid = genreid(genreLower)
     var tahun = agent.getContext('recommendchoicegetgenre-followup').parameters.tahun
     var rate = agent.getContext('recommendchoicegetgenre-followup').parameters.rate
-    agent.add('Ini list film dengan genre '+genreInput+' rilisan tahun '+tahun+' dan rating '+rate+' :')
+    agent.add('Berikut list film dengan genre '+genreInput+' rilisan tahun '+tahun+' dan rating '+rate+' :')
     return themoviedb.discover.movie({'with_genres':moviegenreid,'primary_release_year':tahun,'vote_average.gte':rate,'sort_by':'popularity.desc'}).then((data)=>{
       let movieres = data.results
       movieres.forEach(element=>{
@@ -108,7 +107,7 @@ app.post('/dialogflow', express.json(), (req, res) => {
     })
     
     return getrecom.then((data)=>{
-      agent.add('Karena kamu pernah melihat film '+title+' , berikut ini rekomendasi film yang bisa kamu tonton selanjutnya: ')
+      agent.add('Karena kamu pernah menonton film '+title+' , berikut ini rekomendasi film yang bisa kamu tonton selanjutnya: ')
       data.forEach(element => {
         // console.log(element.title)
         agent.add(element.title)
