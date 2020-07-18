@@ -446,7 +446,7 @@ app.post('/dialogflow', express.json(), (req, res) => {
     })
   }
 
-  async function askmoviedontrememberwiththirdgenreyeshandler(agent){
+  async function askmoviedontrememberwiththirdgenreinterestedhandler(agent){
     agent.add('Karena kamu tertarik dengan film '+get_movie['title']+' maka film ini mungkin cocok untuk kamu tonton selanjutnya')
     var num = Math.ceil(Math.random()* 2)+1
     var pick = Math.ceil(Math.random()* 10)
@@ -464,7 +464,73 @@ app.post('/dialogflow', express.json(), (req, res) => {
     agent.add('Dari rekomendasi diatas apakah film tersebut cocok untuk kamu tonton?')
   }
 
-  function askmoviedontrememberwiththirdgenreaccepthandler(agent){
+  function askmoviedontrememberwiththirdgenreinterestedyeshandler(agent){
+    agent.add('Selamat kamu sudah menemukan film yang cocok untuk kamu tonton selanjutnya!')
+  }
+
+  async function askmoviedontrememberwiththirdgenreinterestednohandler(agent){
+    agent.add('Oke. Saya tampilkan rekomendasi lain untuk film '+get_movie['title']+' ya.')
+    var num = Math.ceil(Math.random()* 2)+1
+    var pick = Math.ceil(Math.random()* 10)
+    const getrecom = new Promise((resolve,reject)=>{
+      mdb.movieRecommend({id:get_movie_id,page:1},(err,res)=>{
+        let movieres = res.results[pick]
+        resolve(movieres)
+        // console.log(movieres)
+      })
+    })
+    get_movie2 = await getrecom
+    agent.add('Judul: '+get_movie2['title'])
+    agent.add('Sinopsis: '+get_movie2['overview'])
+    agent.add('Score TMDB: '+get_movie2['vote_average'])
+    agent.add('Dari rekomendasi diatas apakah kamu menemukan film yang cocok untuk kamu tonton?')
+  }
+
+  function askmoviedontrememberwiththirdgenreinterestednoaccepthandler(agent){
+    agent.add('Selamat kamu sudah menemukan film yang cocok untuk kamu tonton selanjutnya!')
+  }
+
+  async function askmoviedontrememberwiththirdgenreaccepthandler(agent){
+    agent.add('Karena kamu tertarik dengan film '+get_movie['title']+' maka film ini mungkin cocok untuk kamu tonton selanjutnya')
+    var num = Math.ceil(Math.random()* 2)+1
+    var pick = Math.ceil(Math.random()* 10)
+    const getrecom = new Promise((resolve,reject)=>{
+      mdb.movieRecommend({id:get_movie_id,page:1},(err,res)=>{
+        let movieres = res.results[pick]
+        resolve(movieres)
+        // console.log(movieres)
+      })
+    })
+    get_movie2 = await getrecom
+    agent.add('Judul: '+get_movie2['title'])
+    agent.add('Sinopsis: '+get_movie2['overview'])
+    agent.add('Score TMDB: '+get_movie2['vote_average'])
+    agent.add('Dari rekomendasi diatas apakah film tersebut cocok untuk kamu tonton?')
+  }
+
+  function askmoviedontrememberwiththirdgenreacceptyeshandler(agent){
+    agent.add('Selamat kamu sudah menemukan film yang cocok untuk kamu tonton selanjutnya!')
+  }
+
+  async function askmoviedontrememberwiththirdgenreacceptnohandler(agent){
+    agent.add('Oke. Saya tampilkan rekomendasi lain untuk film '+get_movie['title']+' ya.')
+    var num = Math.ceil(Math.random()* 2)+1
+    var pick = Math.ceil(Math.random()* 10)
+    const getrecom = new Promise((resolve,reject)=>{
+      mdb.movieRecommend({id:get_movie_id,page:1},(err,res)=>{
+        let movieres = res.results[pick]
+        resolve(movieres)
+        // console.log(movieres)
+      })
+    })
+    get_movie2 = await getrecom
+    agent.add('Judul: '+get_movie2['title'])
+    agent.add('Sinopsis: '+get_movie2['overview'])
+    agent.add('Score TMDB: '+get_movie2['vote_average'])
+    agent.add('Dari rekomendasi diatas apakah kamu menemukan film yang cocok untuk kamu tonton?')
+  }
+
+  function askmoviedontrememberwiththirdgenreacceptnoacceptedhandler(agent){
     agent.add('Selamat kamu sudah menemukan film yang cocok untuk kamu tonton selanjutnya!')
   }
 
@@ -864,8 +930,14 @@ app.post('/dialogflow', express.json(), (req, res) => {
   // intentMap.set('movie-dont-remember-third-genre-interested-yes', moviedontrememberthirdgenreinterestedyeshandler)
   // intentMap.set('movie-dont-remember-third-genre-interested-no', moviedontrememberthirdgenreinterestednohandler)
   intentMap.set('ask-movie-dont-remember-with-third-genre-no', askmoviedontrememberwiththirdgenrenohandler)
-  intentMap.set('ask-movie-dont-remember-with-third-genre-yes', askmoviedontrememberwiththirdgenreyeshandler)
+  intentMap.set('ask-movie-dont-remember-with-third-genre-interested', askmoviedontrememberwiththirdgenreinterestedhandler)
+  intentMap.set('ask-movie-dont-remember-with-third-genre-interested-yes', askmoviedontrememberwiththirdgenreinterestedyeshandler)
+  intentMap.set('ask-movie-dont-remember-with-third-genre-interested-no', askmoviedontrememberwiththirdgenreinterestednohandler)
+  intentMap.set('ask-movie-dont-remember-with-third-genre-interested-no-accept', askmoviedontrememberwiththirdgenreinterestednoaccepthandler)
   intentMap.set('ask-movie-dont-remember-with-third-genre-accept', askmoviedontrememberwiththirdgenreaccepthandler)
+  intentMap.set('ask-movie-dont-remember-with-third-genre-accept-yes', askmoviedontrememberwiththirdgenreacceptyeshandler)
+  intentMap.set('ask-movie-dont-remember-with-third-genre-accept-no', askmoviedontrememberwiththirdgenreacceptnohandler)
+  intentMap.set('ask-movie-dont-remember-with-third-genre-accept-no-accepted', askmoviedontrememberwiththirdgenreacceptnoacceptedhandler)
   intentMap.set('get-one-recommendation', getonerecommendationhandler)
   // intentMap.set('get-one-another-recommendation', getoneanotherrecommendationhandler)
   intentMap.set('get-one-recommendation-yes', getonerecommendationyeshandler)
